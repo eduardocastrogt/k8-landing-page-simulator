@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>How Kubernetes Works: An Interactive visual guide to K8s</title>
+  <meta name="description" content="An interactive, visual, and beginner-friendly landing page explaining how Kubernetes orchestrates containers. Simulate deployments and learn architecture details in real-time.">
+  <meta name="keywords" content="Kubernetes, K8s, Container Orchestration, Docker, Cloud Native, DevOps, Tutorial, Interactive Guide">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       HEADER / NAVIGATION
+       ========================================== -->
+  <header class="header" id="header">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <!-- Kubernetes Logo SVG -->
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 2.5 L88.7 21.1 L99.1 63.3 L72.7 96.6 L27.3 96.6 L0.9 63.3 L11.3 21.1 Z" fill="#326CE5" />
+          <!-- Spokes -->
+          <line x1="50" y1="50" x2="50" y2="2.5" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="50" x2="88.7" y2="21.1" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="50" x2="99.1" y2="63.3" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="50" x2="72.7" y2="96.6" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="50" x2="27.3" y2="96.6" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="50" x2="0.9" y2="63.3" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="50" x2="11.3" y2="21.1" stroke="white" stroke-width="4"/>
+          <!-- Inner circle -->
+          <circle cx="50" cy="50" r="18" fill="#326CE5" stroke="white" stroke-width="5"/>
+          <circle cx="50" cy="50" r="8" fill="white"/>
+        </svg>
+        <span>K8s<span class="gradient-text">Explained</span></span>
+      </a>
+      
+      <ul class="nav-menu">
+        <li><a href="#architecture" class="nav-link">Architecture</a></li>
+        <li><a href="#simulator" class="nav-link">Visual Demo</a></li>
+        <li><a href="#concepts" class="nav-link">Core Concepts</a></li>
+        <li><a href="#benefits" class="nav-link">Why K8s</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <a href="https://kodekloud.com/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Try Hands-On Labs</a>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================
+         HERO SECTION
+         ========================================== -->
+    <section class="hero" id="hero">
+      <div class="bg-grid-mesh"></div>
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="badge badge-secondary" style="align-self: flex-start;">Interactive Guide</span>
+          <h1 class="hero-title">How <span class="gradient-text">Kubernetes</span> Orchestrates the Cloud</h1>
+          <p class="hero-subtitle">
+            Kubernetes (K8s) is an open-source platform that automates container operations—eliminating manual processes involved in deploying, scaling, and managing containerized applications.
+          </p>
+          <div class="hero-actions">
+            <a href="#simulator" class="btn btn-primary">Watch Visual Demo</a>
+            <a href="https://kodekloud.com/" target="_blank" rel="noopener" class="btn btn-secondary">Try Hands-On Labs</a>
+          </div>
+        </div>
+        
+        <div class="hero-visual">
+          <!-- Floating Kubernetes Logo SVG -->
+          <svg class="k8s-logo-large" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 2.5 L88.7 21.1 L99.1 63.3 L72.7 96.6 L27.3 96.6 L0.9 63.3 L11.3 21.1 Z" fill="url(#k8sGrad)" />
+            <!-- Spokes -->
+            <line x1="50" y1="50" x2="50" y2="2.5" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <line x1="50" y1="50" x2="88.7" y2="21.1" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <line x1="50" y1="50" x2="99.1" y2="63.3" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <line x1="50" y1="50" x2="72.7" y2="96.6" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <line x1="50" y1="50" x2="27.3" y2="96.6" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <line x1="50" y1="50" x2="0.9" y2="63.3" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <line x1="50" y1="50" x2="11.3" y2="21.1" stroke="white" stroke-width="3" stroke-opacity="0.9"/>
+            <!-- Inner circle -->
+            <circle cx="50" cy="50" r="18" fill="url(#k8sGrad)" stroke="white" stroke-width="4"/>
+            <circle cx="50" cy="50" r="8" fill="white"/>
+            
+            <defs>
+              <linearGradient id="k8sGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a855f7" />
+                <stop offset="100%" stop-color="#06b6d4" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         ARCHITECTURE SECTION
+         ========================================== -->
+    <section class="section" id="architecture">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="align-self: center;">The Anatomy</span>
+          <h2 class="section-title">The Cluster Architecture</h2>
+          <p class="section-subtitle">A Kubernetes cluster consists of two main parts: The Control Plane (the brain) and the Worker Nodes (the muscle).</p>
+        </div>
+        
+        <div class="arch-layout">
+          <!-- Control Plane Column -->
+          <div class="arch-column">
+            <h3 class="column-title">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+              Control Plane (Brain)
+            </h3>
+            
+            <!-- API Server -->
+            <div class="component-card glass-card" data-comp="api-server">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">API Server</h4>
+                <p class="comp-desc">The entry point and gatekeeper of the cluster. All administrative communication passes through it.</p>
+              </div>
+            </div>
+            
+            <!-- etcd -->
+            <div class="component-card glass-card" data-comp="etcd">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">etcd</h4>
+                <p class="comp-desc">A highly available and secure key-value store. It holds the complete state of your cluster at any given point.</p>
+              </div>
+            </div>
+
+            <!-- Scheduler -->
+            <div class="component-card glass-card" data-comp="scheduler">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">Scheduler</h4>
+                <p class="comp-desc">Matches newly created Pods that don't have a node assigned yet to the best fit worker node in the cluster.</p>
+              </div>
+            </div>
+
+            <!-- Controller Manager -->
+            <div class="component-card glass-card" data-comp="controller-manager">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">Controller Manager</h4>
+                <p class="comp-desc">Runs continuous loop controllers that regulate the state of the cluster, checking if the actual state matches the desired state.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Worker Node Column -->
+          <div class="arch-column">
+            <h3 class="column-title">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><line x1="6" y1="6" x2="18" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="18" x2="18" y2="18"/></svg>
+              Worker Nodes (Muscle)
+            </h3>
+            
+            <!-- Kubelet -->
+            <div class="component-card glass-card" data-comp="kubelet">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">Kubelet</h4>
+                <p class="comp-desc">The primary node agent. It reports node status back to the API Server and makes sure that containers in Pods are running.</p>
+              </div>
+            </div>
+            
+            <!-- Container Runtime -->
+            <div class="component-card glass-card" data-comp="container-runtime">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><path d="M7 2v20M17 2v20M2 7h20M2 17h20"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">Container Runtime</h4>
+                <p class="comp-desc">The software responsible for actually running the containerized applications (usually containerd or Docker).</p>
+              </div>
+            </div>
+
+            <!-- Kube-Proxy -->
+            <div class="component-card glass-card" data-comp="kube-proxy">
+              <div class="comp-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+              </div>
+              <div class="comp-info">
+                <h4 class="comp-name">Kube-Proxy</h4>
+                <p class="comp-desc">An essential network proxy running on each node, maintaining network rules to allow communication to your Pods from inside or outside the cluster.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SIMULATOR SECTION
+         ========================================== -->
+    <section class="section" id="simulator" style="background-color: hsl(var(--bg-secondary));">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-secondary" style="align-self: center;">Interactive Explainer</span>
+          <h2 class="section-title">Visual Deployment Simulator</h2>
+          <p class="section-subtitle">This interactive demo visualizes how the Control Plane processes declarative configurations to schedule pods across nodes in real-time.</p>
+        </div>
+        
+        <div class="simulator-container">
+          <!-- Left Panel: YAML Editor -->
+          <div class="editor-panel glass-card" id="editorPanel">
+            <div class="editor-header">
+              <div class="editor-dots">
+                <div class="editor-dot"></div>
+                <div class="editor-dot"></div>
+                <div class="editor-dot"></div>
+              </div>
+              <div class="editor-title">deployment.yaml</div>
+            </div>
+            
+            <div class="editor-body">
+              <div class="yaml-line"><span class="line-number">1</span><span class="line-content"><span class="yaml-key">apiVersion</span>: <span class="yaml-value">apps/v1</span></span></div>
+              <div class="yaml-line"><span class="line-number">2</span><span class="line-content"><span class="yaml-key">kind</span>: <span class="yaml-value">Deployment</span></span></div>
+              <div class="yaml-line"><span class="line-number">3</span><span class="line-content"><span class="yaml-key">metadata</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">4</span><span class="line-content">  <span class="yaml-key">name</span>: <span class="yaml-value">web-app</span></span></div>
+              <div class="yaml-line"><span class="line-number">5</span><span class="line-content"><span class="yaml-key">spec</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">6</span><span class="line-content">  <span class="yaml-key">replicas</span>: <input type="number" id="replicaInput" class="yaml-input" value="3" min="1" max="6" step="1"> <span class="yaml-comment"># Desired state</span></span></div>
+              <div class="yaml-line"><span class="line-number">7</span><span class="line-content">  <span class="yaml-key">selector</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">8</span><span class="line-content">    <span class="yaml-key">matchLabels</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">9</span><span class="line-content">      <span class="yaml-key">app</span>: <span class="yaml-value">nginx-web</span></span></div>
+              <div class="yaml-line"><span class="line-number">10</span><span class="line-content">  <span class="yaml-key">template</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">11</span><span class="line-content">    <span class="yaml-key">metadata</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">12</span><span class="line-content">      <span class="yaml-key">labels</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">13</span><span class="line-content">        <span class="yaml-key">app</span>: <span class="yaml-value">nginx-web</span></span></div>
+              <div class="yaml-line"><span class="line-number">14</span><span class="line-content">    <span class="yaml-key">spec</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">15</span><span class="line-content">      <span class="yaml-key">containers</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">16</span><span class="line-content">      - <span class="yaml-key">name</span>: <span class="yaml-value">web-container</span></span></div>
+              <div class="yaml-line"><span class="line-number">17</span><span class="line-content">        <span class="yaml-key">image</span>: <select id="imageSelect" class="yaml-select">
+                  <option value="nginx:alpine">nginx:alpine</option>
+                  <option value="node:18-slim">node:18-slim</option>
+                  <option value="python:3.11-alpine">python:3.11-alpine</option>
+                </select></span></div>
+              <div class="yaml-line"><span class="line-number">18</span><span class="line-content">        <span class="yaml-key">ports</span>:</span></div>
+              <div class="yaml-line"><span class="line-number">19</span><span class="line-content">        - <span class="yaml-key">containerPort</span>: <span class="yaml-value">80</span></span></div>
+            </div>
+            
+            <div class="editor-footer">
+              <button class="btn btn-primary" id="deployBtn">kubectl apply -f deployment.yaml</button>
+            </div>
+          </div>
+          
+          <!-- Right Panel: Visual Dashboard -->
+          <div class="visualizer-panel glass-card">
+            <div class="visualizer-header">
+              <h3 class="visualizer-title">Cluster State Dashboard</h3>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" id="chaosBtn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" title="Simulate dropping a node to check rescheduling">Node Failure</button>
+                <button class="btn btn-secondary btn-sm" id="scaleResetBtn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Reset Cluster</button>
+              </div>
+            </div>
+            
+            <div class="cluster-grid">
+              <!-- Control Plane Box -->
+              <div class="cp-box">
+                <span class="cp-box-label">Control Plane</span>
+                <div class="cp-elements">
+                  <div class="cp-node" id="cp-apiserver">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                    <span>API Server</span>
+                  </div>
+                  <div class="cp-node" id="cp-etcd">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+                    <span>etcd</span>
+                  </div>
+                  <div class="cp-node" id="cp-scheduler">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span>Scheduler</span>
+                  </div>
+                  <div class="cp-node" id="cp-controller">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span>Controller</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Worker Nodes Box -->
+              <div class="nodes-box">
+                <span class="nodes-box-label">Worker Nodes</span>
+                <div class="sim-flow-container" id="flowContainer"></div>
+                
+                <div class="nodes-container">
+                  <!-- Worker Node 1 -->
+                  <div class="worker-node" id="node-1">
+                    <div class="node-header">
+                      <div class="node-name">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/></svg>
+                        node-01
+                      </div>
+                      <div class="node-status-dot" id="node-1-status"></div>
+                    </div>
+                    <div class="pods-grid" id="node-1-pods">
+                      <!-- Active pods render here -->
+                    </div>
+                  </div>
+                  
+                  <!-- Worker Node 2 -->
+                  <div class="worker-node" id="node-2">
+                    <div class="node-header">
+                      <div class="node-name">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/></svg>
+                        node-02
+                      </div>
+                      <div class="node-status-dot" id="node-2-status"></div>
+                    </div>
+                    <div class="pods-grid" id="node-2-pods">
+                      <!-- Active pods render here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Live Console output -->
+        <div class="sim-console" id="simConsole">
+          <div class="console-line">
+            <span class="console-timestamp">[12:00:00]</span>
+            <span class="console-text system">Interactive Demo Ready. Click "kubectl apply -f deployment.yaml" to start.</span>
+          </div>
+        </div>
+
+        <!-- KodeKloud Callout Banner -->
+        <div class="glass-card" style="margin-top: 3rem; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; border-color: hsl(var(--secondary) / 0.3);">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 650px;">
+            <span class="badge badge-secondary" style="align-self: flex-start;">Practice in Real Clusters</span>
+            <h4 style="font-size: 1.3rem; font-weight: 700;">Ready for Real Hands-On Labs?</h4>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              This landing page is an interactive visual demonstration. To practice with a real Kubernetes environment using kubectl, cluster commands, and realistic scenarios, check out the hands-on labs at KodeKloud.
+            </p>
+          </div>
+          <a href="https://kodekloud.com/" target="_blank" rel="noopener" class="btn btn-primary" style="flex-shrink: 0;">Go to KodeKloud Labs</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CORE CONCEPTS SECTION
+         ========================================== -->
+    <section class="section" id="concepts">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="align-self: center;">Glossary</span>
+          <h2 class="section-title">Core Kubernetes Concepts</h2>
+          <p class="section-subtitle">Learn the fundamental building blocks of Kubernetes resources and objects.</p>
+        </div>
+        
+        <div class="concept-tabs-container">
+          <!-- Navigation Tabs -->
+          <ul class="concept-tabs">
+            <li class="concept-tab active" data-tab="pods">Pods</li>
+            <li class="concept-tab" data-tab="deployments">Deployments</li>
+            <li class="concept-tab" data-tab="services">Services</li>
+            <li class="concept-tab" data-tab="ingress">Ingress</li>
+            <li class="concept-tab" data-tab="namespaces">Namespaces</li>
+          </ul>
+          
+          <!-- Content Display Panels -->
+          <div class="concept-display glass-card" style="padding: 3rem; width: 100%;">
+            
+            <!-- PODS -->
+            <div class="concept-content active" id="tab-content-pods">
+              <div class="concept-text-side">
+                <div class="concept-title-box">
+                  <span style="color: hsl(var(--primary));">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/></svg>
+                  </span>
+                  <h3>What is a Pod?</h3>
+                </div>
+                <p class="concept-desc">
+                  Pods are the smallest, most basic deployable objects in Kubernetes. A Pod represents a single instance of a running process in your cluster and can contain one or more containers.
+                </p>
+                <ul class="concept-bullets">
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Shared Resources:</strong> All containers in a Pod share the same network IP, port space, and storage volumes.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Ephemeral Nature:</strong> Pods are created, run, and destroyed. They are not self-healing on their own unless managed by a controller.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>One-to-One Model:</strong> The most common pattern is one container per Pod, but sidecar helpers are often deployed alongside the main app.
+                  </li>
+                </ul>
+              </div>
+              <div class="concept-visual-side">
+                <svg class="concept-svg-illustration" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Outer Pod boundary -->
+                  <rect x="20" y="20" width="160" height="160" rx="20" stroke="hsl(var(--primary))" stroke-width="3" stroke-dasharray="6 6" fill="hsl(var(--primary) / 0.05)" />
+                  <text x="30" y="42" fill="hsl(var(--primary))" font-family="var(--font-heading)" font-size="12" font-weight="700">POD BOUNDARY</text>
+                  <text x="30" y="165" fill="hsl(var(--text-muted))" font-family="var(--font-mono)" font-size="10">IP: 10.244.0.12</text>
+                  <!-- Container 1 -->
+                  <rect x="40" y="60" width="120" height="40" rx="8" fill="hsl(var(--bg-primary))" stroke="hsl(var(--secondary))" stroke-width="2" />
+                  <text x="50" y="85" fill="hsl(var(--secondary))" font-family="var(--font-mono)" font-size="12" font-weight="600">app-container</text>
+                  <!-- Container 2 (Sidecar) -->
+                  <rect x="40" y="110" width="120" height="35" rx="8" fill="hsl(var(--bg-primary))" stroke="hsl(var(--border-color))" stroke-width="2" />
+                  <text x="50" y="132" fill="hsl(var(--text-secondary))" font-family="var(--font-mono)" font-size="10">helper-sidecar</text>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- DEPLOYMENTS -->
+            <div class="concept-content" id="tab-content-deployments">
+              <div class="concept-text-side">
+                <div class="concept-title-box">
+                  <span style="color: hsl(var(--primary));">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                  </span>
+                  <h3>What is a Deployment?</h3>
+                </div>
+                <p class="concept-desc">
+                  A Deployment provides declarative updates for Pods and ReplicaSets. You describe a desired state in a Deployment, and the Deployment Controller changes the actual state to the desired state at a controlled rate.
+                </p>
+                <ul class="concept-bullets">
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Replica Management:</strong> Manages how many duplicate copies (replicas) of a Pod should run across nodes.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Rolling Updates:</strong> Upgrades application code without downtime by progressively starting new pods while shutting down old ones.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Rollbacks:</strong> Allows rolling back to a previous Deployment revision if the current state is unstable.
+                  </li>
+                </ul>
+              </div>
+              <div class="concept-visual-side">
+                <svg class="concept-svg-illustration" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Deployment Layer -->
+                  <rect x="20" y="20" width="160" height="35" rx="6" fill="hsl(var(--primary) / 0.1)" stroke="hsl(var(--primary))" stroke-width="2" />
+                  <text x="35" y="42" fill="hsl(var(--primary))" font-family="var(--font-heading)" font-size="12" font-weight="700">DEPLOYMENT (web-app)</text>
+                  
+                  <!-- ReplicaSet Layer -->
+                  <rect x="40" y="70" width="120" height="30" rx="6" fill="hsl(var(--secondary) / 0.1)" stroke="hsl(var(--secondary))" stroke-width="2" />
+                  <text x="50" y="89" fill="hsl(var(--secondary))" font-family="var(--font-heading)" font-size="10" font-weight="700">REPLICASET (replicas: 3)</text>
+                  
+                  <!-- Pod Flow -->
+                  <path d="M100 100 V120 M100 120 H50 V130 M100 120 H150 V130 M100 120 V130" stroke="hsl(var(--border-color))" stroke-width="2" stroke-dasharray="4 4" />
+                  
+                  <!-- Pods -->
+                  <circle cx="50" cy="145" r="14" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="2" />
+                  <text x="45" y="149" fill="hsl(var(--accent-green))" font-family="var(--font-mono)" font-size="10">P1</text>
+                  
+                  <circle cx="100" cy="145" r="14" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="2" />
+                  <text x="95" y="149" fill="hsl(var(--accent-green))" font-family="var(--font-mono)" font-size="10">P2</text>
+                  
+                  <circle cx="150" cy="145" r="14" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="2" />
+                  <text x="145" y="149" fill="hsl(var(--accent-green))" font-family="var(--font-mono)" font-size="10">P3</text>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- SERVICES -->
+            <div class="concept-content" id="tab-content-services">
+              <div class="concept-text-side">
+                <div class="concept-title-box">
+                  <span style="color: hsl(var(--primary));">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                  </span>
+                  <h3>What is a Service?</h3>
+                </div>
+                <p class="concept-desc">
+                  An abstract way to expose an application running on a set of Pods as a network service. Since pods are volatile, their IPs change constantly. Services act as stable endpoints.
+                </p>
+                <ul class="concept-bullets">
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Static IP & DNS:</strong> Provides a single, unchangeable IP address and DNS name for a set of target Pods.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Load Balancing:</strong> Distributes network traffic uniformly across all available target pods matching the Service selector.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Selector matching:</strong> Dynamically routes traffic using labels (e.g. `app: web`), tracking pod additions and removals automatically.
+                  </li>
+                </ul>
+              </div>
+              <div class="concept-visual-side">
+                <svg class="concept-svg-illustration" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- User Traffic -->
+                  <circle cx="20" cy="100" r="12" fill="hsl(var(--primary) / 0.15)" stroke="white" stroke-width="1.5" />
+                  <text x="14" y="103" fill="white" font-family="var(--font-heading)" font-size="8">Client</text>
+                  <path d="M35 100 H65" stroke="white" stroke-width="2" marker-end="url(#arrow)" />
+                  
+                  <!-- Service Layer -->
+                  <rect x="70" y="60" width="50" height="80" rx="8" fill="hsl(var(--secondary) / 0.1)" stroke="hsl(var(--secondary))" stroke-width="2" />
+                  <text x="76" y="95" fill="hsl(var(--secondary))" font-family="var(--font-heading)" font-size="10" font-weight="700">SERVICE</text>
+                  <text x="80" y="115" fill="hsl(var(--text-secondary))" font-family="var(--font-mono)" font-size="8">IP: 10.96...</text>
+                  
+                  <!-- Pod load balancing -->
+                  <path d="M125 90 L150 55 M125 100 H150 M125 110 L150 145" stroke="hsl(var(--border-color))" stroke-width="1.5" />
+                  
+                  <!-- Pod Targets -->
+                  <circle cx="165" cy="50" r="12" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="2" />
+                  <circle cx="165" cy="100" r="12" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="2" />
+                  <circle cx="165" cy="150" r="12" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="2" />
+                </svg>
+              </div>
+            </div>
+            
+            <!-- INGRESS -->
+            <div class="concept-content" id="tab-content-ingress">
+              <div class="concept-text-side">
+                <div class="concept-title-box">
+                  <span style="color: hsl(var(--primary));">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+                  </span>
+                  <h3>What is Ingress?</h3>
+                </div>
+                <p class="concept-desc">
+                  An API object that manages external access to the services in a cluster, typically HTTP. Ingress can provide load balancing, SSL termination, and name-based virtual hosting.
+                </p>
+                <ul class="concept-bullets">
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Routing Rules:</strong> Allows exposing multiple internal cluster services under a single external IP address via HTTP paths (e.g. `/api` or `/web`).
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Domain Management:</strong> Map domains like `example.com` directly to internal Services.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>SSL/TLS termination:</strong> Decrypt secure HTTPS traffic at the perimeter before routing it internally.
+                  </li>
+                </ul>
+              </div>
+              <div class="concept-visual-side">
+                <svg class="concept-svg-illustration" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- External Request -->
+                  <path d="M20 50 H55" stroke="white" stroke-width="1.5" />
+                  <text x="10" y="42" fill="white" font-family="var(--font-mono)" font-size="8">my-app.com/api</text>
+                  
+                  <path d="M20 150 H55" stroke="white" stroke-width="1.5" />
+                  <text x="10" y="142" fill="white" font-family="var(--font-mono)" font-size="8">my-app.com/static</text>
+                  
+                  <!-- Ingress Controller -->
+                  <rect x="60" y="30" width="45" height="140" rx="8" fill="hsl(var(--primary) / 0.15)" stroke="hsl(var(--primary))" stroke-width="2" />
+                  <text x="64" y="95" fill="hsl(var(--primary))" font-family="var(--font-heading)" font-size="9" font-weight="700">INGRESS</text>
+                  
+                  <!-- Routing -->
+                  <path d="M110 70 H140" stroke="hsl(var(--border-color))" stroke-width="1.5" />
+                  <path d="M110 130 H140" stroke="hsl(var(--border-color))" stroke-width="1.5" />
+                  
+                  <!-- Services -->
+                  <rect x="145" y="50" width="40" height="35" rx="4" fill="hsl(var(--secondary) / 0.1)" stroke="hsl(var(--secondary))" stroke-width="1.5" />
+                  <text x="149" y="70" fill="hsl(var(--secondary))" font-family="var(--font-heading)" font-size="8">API-Svc</text>
+                  
+                  <rect x="145" y="110" width="40" height="35" rx="4" fill="hsl(var(--secondary) / 0.1)" stroke="hsl(var(--secondary))" stroke-width="1.5" />
+                  <text x="148" y="130" fill="hsl(var(--secondary))" font-family="var(--font-heading)" font-size="8">Static-Svc</text>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- NAMESPACES -->
+            <div class="concept-content" id="tab-content-namespaces">
+              <div class="concept-text-side">
+                <div class="concept-title-box">
+                  <span style="color: hsl(var(--primary));">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  </span>
+                  <h3>What is a Namespace?</h3>
+                </div>
+                <p class="concept-desc">
+                  Namespaces are virtual clusters backed by the same physical cluster. They provide a scope for names and allow dividing cluster resources between multiple users, projects, or environments.
+                </p>
+                <ul class="concept-bullets">
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Resource Isolation:</strong> Ideal for separating dev, staging, and production environments within a single cluster.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Access Control:</strong> Secure individual workspaces using RBAC (Role-Based Access Control) defined on specific namespaces.
+                  </li>
+                  <li class="concept-bullet-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <strong>Quota Management:</strong> Limit CPU, memory, and storage volumes allocated to specific teams or environments.
+                  </li>
+                </ul>
+              </div>
+              <div class="concept-visual-side">
+                <svg class="concept-svg-illustration" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Physical Cluster Boundary -->
+                  <rect x="10" y="10" width="180" height="180" rx="12" fill="none" stroke="hsl(var(--border-color))" stroke-dasharray="4 4" stroke-width="2" />
+                  <text x="18" y="25" fill="hsl(var(--text-muted))" font-family="var(--font-heading)" font-size="8" font-weight="700">PHYSICAL CLUSTER</text>
+                  
+                  <!-- Namespace 1: Dev -->
+                  <rect x="20" y="40" width="160" height="60" rx="8" fill="hsl(var(--primary) / 0.05)" stroke="hsl(var(--primary))" stroke-width="1.5" />
+                  <text x="30" y="55" fill="hsl(var(--primary))" font-family="var(--font-heading)" font-size="10" font-weight="700">Namespace: dev</text>
+                  <circle cx="50" cy="80" r="10" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="1.5" />
+                  <circle cx="80" cy="80" r="10" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="1.5" />
+                  
+                  <!-- Namespace 2: Prod -->
+                  <rect x="20" y="115" width="160" height="60" rx="8" fill="hsl(var(--secondary) / 0.05)" stroke="hsl(var(--secondary))" stroke-width="1.5" />
+                  <text x="30" y="130" fill="hsl(var(--secondary))" font-family="var(--font-heading)" font-size="10" font-weight="700">Namespace: prod</text>
+                  <circle cx="50" cy="155" r="10" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="1.5" />
+                  <circle cx="80" cy="155" r="10" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="1.5" />
+                  <circle cx="110" cy="155" r="10" fill="hsl(var(--bg-primary))" stroke="hsl(var(--accent-green))" stroke-width="1.5" />
+                </svg>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         WHY KUBERNETES SECTION
+         ========================================== -->
+    <section class="section" id="benefits">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-secondary" style="align-self: center;">Capabilities</span>
+          <h2 class="section-title">Why Teams Choose Kubernetes</h2>
+          <p class="section-subtitle">Kubernetes brings resilient infrastructure, automation, and standardization to cloud-native applications.</p>
+        </div>
+        
+        <div class="benefits-grid">
+          <!-- Self-Healing -->
+          <div class="benefit-card glass-card">
+            <div class="benefit-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="benefit-title">Self-Healing</h3>
+            <p class="benefit-desc">K8s automatically restarts containers that fail, replaces and reschedules containers when nodes die, and kills containers that don't respond to user-defined health checks.</p>
+          </div>
+          
+          <!-- Auto-scaling -->
+          <div class="benefit-card glass-card">
+            <div class="benefit-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <h3 class="benefit-title">Horizontal Scaling</h3>
+            <p class="benefit-desc">Scale your application up or down automatically based on CPU usage, memory usage, or custom metrics, via commands or directly through the UI.</p>
+          </div>
+          
+          <!-- Service Discovery & Load Balancing -->
+          <div class="benefit-card glass-card">
+            <div class="benefit-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+            </div>
+            <h3 class="benefit-title">Load Balancing</h3>
+            <p class="benefit-desc">K8s exposes containers using DNS names or static IPs. If traffic to a container is high, it distributes the network load evenly, ensuring stable performance.</p>
+          </div>
+          
+          <!-- Automated Rollouts -->
+          <div class="benefit-card glass-card">
+            <div class="benefit-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            </div>
+            <h3 class="benefit-title">Automated Rollouts</h3>
+            <p class="benefit-desc">Declare the desired state for your containerized apps, and K8s rolls them out at a controlled rate, automatically rolling back changes if errors occur.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 2.5 L88.7 21.1 L99.1 63.3 L72.7 96.6 L27.3 96.6 L0.9 63.3 L11.3 21.1 Z" fill="#06b6d4" />
+              <circle cx="50" cy="50" r="18" fill="#020617" stroke="white" stroke-width="4"/>
+              <circle cx="50" cy="50" r="8" fill="white"/>
+            </svg>
+            <span>K8s Explained</span>
+          </div>
+          <p class="footer-desc">An interactive, high-fidelity visual experience built to demystify container orchestration on Kubernetes.</p>
+        </div>
+        
+        <div class="footer-links-group">
+          <div class="footer-links-col">
+            <h4 class="footer-links-title">Resources</h4>
+            <ul class="footer-links-list">
+              <li><a href="https://kubernetes.io/docs/home/" target="_blank" rel="noopener">Official Documentation</a></li>
+              <li><a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">GitHub Project</a></li>
+              <li><a href="https://kodekloud.com/" target="_blank" rel="noopener">KodeKloud K8s Labs</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-col">
+            <h4 class="footer-links-title">Developer</h4>
+            <ul class="footer-links-list">
+              <li><a href="#simulator">Interactive Visual Demo</a></li>
+              <li><a href="#architecture">Architecture Breakdown</a></li>
+              <li><a href="#concepts">K8s API Objects</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 K8s Explained. Made for cloud enthusiasts.</p>
+        <p>Built with Pure HTML, Vanilla CSS & Vanilla JS.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
